@@ -124,6 +124,12 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
 .invalid{border-color:var(--red-600)!important;box-shadow:0 0 0 3px var(--red-50)!important;}
 .chips-invalid{outline:2px solid var(--red-600);outline-offset:6px;border-radius:var(--radius-md);}
 
+/* dev-modus: testgegevens-knop, alleen zichtbaar met ?test in de URL */
+.devfill{display:inline-block;margin:10px 0 2px;background:var(--coral-100);color:var(--red-700);
+  border:1.5px dashed var(--coral-500);border-radius:var(--radius-sm);font-family:var(--font-sans);
+  font-weight:700;font-size:.82rem;padding:7px 12px;cursor:pointer;min-height:auto;}
+.devfill:hover{background:var(--coral-500);color:#fff;}
+
 /* result */
 .result-head{text-align:center;padding:10px 0 4px;}
 .result-head .check{width:54px;height:54px;border-radius:50%;background:var(--teal-100);color:var(--teal-700);
@@ -590,6 +596,52 @@ document.getElementById('copyBtn').onclick=async()=>{
   catch(e){ const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();document.execCommand('copy');ta.remove(); }
   const toast=document.getElementById('toast');toast.classList.add('show');setTimeout(()=>toast.classList.remove('show'),1800);
 };
+
+/* dev-modus: alleen actief met ?test in de URL. Vult per stap de open velden
+   met geloofwaardige, fictieve testgegevens zodat je snel kunt doorklikken. */
+const DEV = new URLSearchParams(location.search).has('test');
+function devSet(id,val){ const e=document.getElementById(id); if(e) e.value=val; }
+function devChips(group,labels){ document.querySelectorAll(`[data-chips="${group}"] .chip`).forEach(c=>{ c.classList.toggle('on', labels.includes(c.textContent.trim())); }); }
+function fillStep(step){
+  if(step===0){
+    devSet('naam','Sam de Vries'); devSet('tel','06 12345678'); devSet('plaats','Almere');
+    devSet('mail','sam.devries@voorbeeld.nl'); devSet('dob','1992-04-18');
+  } else if(step===1){
+    let first=document.querySelector('.exp'); if(!first){ addExp(); first=document.querySelector('.exp'); }
+    first.querySelector('.exp-wat').value="Kassamedewerker bij Albert Heijn";
+    first.querySelector('.exp-van').value="2019";
+    first.querySelector('.exp-tot').value="2022";
+    first.querySelector('.exp-taken').value="Kassa bediend, vakken gevuld, klanten geholpen en nieuwe collega's ingewerkt.";
+    first.querySelector('.exp-succes').value="Klanten vroegen vaak naar mij en ik ben nooit te laat geweest.";
+    devSet('opleiding',"Vmbo afgerond, daarna een heftruckcursus gehaald.");
+  } else if(step===2){
+    devChips('papieren',['Rijbewijs B','VCA']);
+    devChips('talen',['Nederlands','Engels','Arabisch']);
+  } else if(step===3){
+    devSet('taak',"Elke ochtend ontbijt klaarmaken voor tien bewoners in het verzorgingshuis.");
+    devSet('helpen',"Een nieuwe collega op de kassa ingewerkt en mijn buurman geholpen met zijn post.");
+  } else if(step===4){
+    devChips('apparaten',['Kassasysteem','Computer / Office']);
+    devChips('overjou',['Rustig','Behulpzaam','Betrouwbaar']);
+    devChips('nietmeer',['Avonddiensten']);
+  } else if(step===5){
+    devSet('opt_spannend',"Een klant werd boos over de wachtrij. Ik heb hem rustig te woord gestaan en geholpen.");
+    devSet('opt_geleerd',"Mijn oma leerde me koken voor grote groepen.");
+    devSet('opt_grens',"Toen ik te veel diensten kreeg, heb ik rustig aangegeven dat het niet ging.");
+  } else if(step===6){
+    if(TEMPLATES && TEMPLATES.length){ selected={tpl:TEMPLATES[0].id,color:tplDefaultColor(TEMPLATES[0])}; renderTemplates(); }
+  }
+  clearVal();
+}
+if(DEV){
+  steps.forEach(s=>{
+    const step=+s.dataset.step; if(step>6) return;
+    const b=document.createElement('button');
+    b.type='button'; b.className='devfill'; b.textContent='⚡ Vul testgegevens';
+    b.onclick=()=>fillStep(step);
+    s.insertBefore(b, s.firstChild);
+  });
+}
 
 render();
 </script>
