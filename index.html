@@ -409,6 +409,8 @@ function chipsVal(key){
   return on;
 }
 function v(id){const e=document.getElementById(id);return e?e.value.trim():'';}
+/* datum van invoer (YYYY-MM-DD) naar leesbaar (DD-MM-YYYY) */
+function dateNL(val){const m=val.match(/^(\d{4})-(\d{2})-(\d{2})$/);return m?`${m[3]}-${m[2]}-${m[1]}`:val;}
 function gather(){
   const exp=Array.from(document.querySelectorAll('.exp')).map(e=>{
     const wat=e.querySelector('.exp-wat').value.trim();
@@ -423,7 +425,7 @@ function gather(){
     return block;
   }).filter(Boolean);
   return {
-    naam:v('naam'),tel:v('tel'),plaats:v('plaats'),mail:v('mail'),dob:v('dob'),
+    naam:v('naam'),tel:v('tel'),plaats:v('plaats'),mail:v('mail'),dob:dateNL(v('dob')),
     exp,opleiding:v('opleiding'),
     papieren:chipsVal('papieren'),talen:chipsVal('talen'),apparaten:chipsVal('apparaten'),
     overjou:chipsVal('overjou'),nietmeer:chipsVal('nietmeer'),

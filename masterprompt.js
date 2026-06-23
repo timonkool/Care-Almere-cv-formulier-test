@@ -97,7 +97,7 @@ Het document moet:
 - Het gekozen template volgen in indeling, kleur en lettertype (zie stap 3)
 - Professioneel ogen, ook als het wordt afgedrukt in zwart-wit
 - Makkelijk te bewerken zijn in Microsoft Word of Google Docs
-- Maximaal één A4-pagina zijn (twee pagina's alleen als de werkervaring dat echt vereist)
+- Minimaal één en maximaal twee A4-pagina's zijn (gebruik een tweede pagina als de inhoud daarom vraagt, maar nooit meer dan twee)
 
 Lever het .docx-bestand op als eindresultaat, zodat de kandidaat het zelf verder kan aanpassen.
 
