@@ -7,8 +7,8 @@
   Per template:
     id          - korte sleutel (komt terug in de bestandsnamen van de previews)
     naam        - weergavenaam in het formulier
-    omschrijving- uitgebreide beschrijving die in de prompt belandt, zodat de
-                  AI het template kan nabouwen in Word
+    omschrijving- uitgebreide, concrete beschrijving die in de prompt belandt,
+                  zodat de AI het template dicht kan benaderen in Word
     kleuren[]   - de kleurvarianten uit de originele template-zips:
                     id   sleutel (= deel van de bestandsnaam)
                     naam Nederlandse label op de swatch
@@ -18,13 +18,21 @@
   De previews zijn gerenderd uit de originele Word-templates en staan in
   templates/previews/<id>-<kleur>.webp. Wil je een template of kleur
   toevoegen/wijzigen: pas hier de data aan en zet de bijbehorende preview erbij.
+
+  De beschrijvingen zijn kleur-neutraal: de gekozen accentkleur wordt apart
+  in de prompt meegegeven (zie buildPreview / opmaakBlok in index.html).
 */
 const TEMPLATES = [
   {
     id:'stylish-modern',
     naam:'Modern',
     omschrijving:
-`Strak en zakelijk. Bovenaan een brede gekleurde balk over de volle breedte met de naam in hoofdletters (wit) en daaronder de functietitel. Daaronder twee kolommen: een brede linkerkolom (ongeveer 70%) met een korte profieltekst ("Career Objective") en daarna de werkervaring (functietitel vet, werkgever en periode op een regel, daaronder bullets); en een smalle rechterkolom (ongeveer 30%) met Contact, Opleiding en Vaardigheden. Elke sectiekop heeft links een klein gekleurd vierkant icoontje. Schreefloos, modern lettertype (Inter, Lexend of Poppins). Eén pagina. Geschikt voor kantoor, zorg, administratie en dienstverlening.`,
+`Indeling: één A4, witte achtergrond, normale marges. Bovenaan een gekleurde balk over de volledige breedte (ongeveer de bovenste 18% van de pagina). Daaronder twee kolommen: links breed (ongeveer 62%) en rechts smal (ongeveer 30%), met witruimte ertussen.
+Kop (in de gekleurde balk): de naam in WITTE hoofdletters, groot, met ruime letterafstand, schreefloos. Daaronder de functietitel, ook wit, kleiner, in hoofdletters met ruime letterafstand. Alles links uitgelijnd met wat ruimte vanaf de linkerrand.
+Sectiekoppen: in HOOFDLETTERS, donkergrijs en vet, met links een klein afgerond vierkant icoontje in de accentkleur met een wit pictogram erin.
+Linkerkolom: begint met een profieltekst (kop bijvoorbeeld "Profiel") als lopende alinea van een paar regels. Daaronder "Werkervaring": per functie de functietitel vet en donker, op de regel eronder "Werkgever, Plaats | Periode" in kleinere grijze tekst, daarna een bullet-lijst met ronde opsommingstekens.
+Rechterkolom: "Contact" (per onderdeel een vet label zoals Telefoon en E-mail, met de waarde op de regel eronder), "Opleiding" (school vet, opleiding cursief eronder) en "Vaardigheden" (een eenvoudige lijst, één per regel, met ruime regelafstand).
+Lettertype: strak en modern schreefloos (Inter, Lexend of Poppins). Accentkleur alleen in de bovenbalk en de icoontjes; alle overige tekst donkergrijs of zwart. Sober, zakelijk en rustig.`,
     kleuren:[
       {id:'blue',   naam:'Blauw',  hex:'#799BCD', img:'templates/previews/stylish-modern-blue.webp'},
       {id:'green',  naam:'Groen',  hex:'#A6B784', img:'templates/previews/stylish-modern-green.webp'},
@@ -38,7 +46,11 @@ const TEMPLATES = [
     id:'westminster',
     naam:'Klassiek',
     omschrijving:
-`Klassiek en verzorgd. Gecentreerde kop: de naam groot in hoofdletters tussen twee dunne horizontale lijnen, daaronder gecentreerd de functietitel. Daaronder twee kolommen, gescheiden door een verticale lijn: bovenin Contact (links) en een profieltekst "Professional Profile" (rechts); daaronder Werkervaring (breed, links) en Opleiding plus Vaardigheden (rechts). Vaardigheden worden getoond als gesegmenteerde balkjes (niveau-indicatie). Sectiekoppen in een elegant lettertype en in de accentkleur. Lettertypes Oswald en Open Sans. Geschikt voor zorg, onderwijs, dienstverlening en kantoor.`,
+`Indeling: één A4, wit, klassiek en symmetrisch.
+Kop: volledig gecentreerd. Bovenaan een dunne horizontale lijn over de breedte; daaronder de naam groot en gecentreerd in een elegant schreef-lettertype in HOOFDLETTERS; daaronder de functietitel gecentreerd in de accentkleur; en dan opnieuw een dunne horizontale lijn.
+Daaronder twee kolommen, gescheiden door een dunne verticale lijn in het midden. Bovenste rij: links de sectiekop "Contact" met de contactgegevens, elk met een klein rond icoontje ervoor; rechts de kop "Profiel" met een korte alinea.
+Daaronder: links de brede kolom "Werkervaring", per functie de functietitel in de accentkleur en vet, daaronder "Werkgever, Plaats | Periode" cursief, dan bullets. Rechts "Opleiding" (school vet, details eronder) en "Vaardigheden": per vaardigheid de naam met daaronder een balk van ongeveer tien kleine rechthoekjes die tot het niveau gevuld zijn in de accentkleur en voor de rest lichtgrijs (een niveau-meter).
+Sectiekoppen: groot, in de accentkleur, in een elegant (schreef) lettertype. Lopende tekst schreefloos (Open Sans). Accentkleur in de koppen, de functietitels, de twee horizontale lijnen en de vaardigheidsbalkjes. Verzorgd, klassiek en evenwichtig.`,
     kleuren:[
       {id:'blue',   naam:'Blauw',  hex:'#35598F', img:'templates/previews/westminster-blue.webp'},
       {id:'green',  naam:'Groen',  hex:'#6B7C48', img:'templates/previews/westminster-green.webp'},
@@ -52,7 +64,12 @@ const TEMPLATES = [
     id:'venture',
     naam:'Strak',
     omschrijving:
-`Minimalistisch met veel witruimte, rustig en heel goed leesbaar (ook ATS-vriendelijk). Bovenaan een gecentreerde contactregel (klein, in de accentkleur, met bolletjes tussen de gegevens). Links een kolom met de naam groot, de functietitel, een profieltekst, Opleiding, Certificaten en Vaardigheden (als nette regels). Rechts de hoofdkolom met de werkervaring als een verticale tijdlijn: kleine ronde icoontjes met een verbindingslijn, functietitel vet, werkgever en periode, daaronder bullets. Sectiekoppen in de accentkleur. Subtiel gekleurd hoekje linksonder. Lettertypes DM Sans en Inter. Geschikt voor kantoor, administratie, techniek en zakelijke functies.`,
+`Indeling: één A4, wit, met heel veel witruimte; minimalistisch en goed leesbaar (ook ATS-vriendelijk).
+Bovenaan: één gecentreerde regel met de contactgegevens in de accentkleur, klein, gescheiden door bolletjes (bijvoorbeeld telefoon • e-mail • linkedin • plaats).
+Daaronder twee kolommen. Linkerkolom smal (ongeveer 33%): de naam groot en vet (mag over twee regels), daaronder de functietitel in grijze hoofdletters. Daarna de secties "Profiel", "Opleiding", "Certificaten" en "Vaardigheden"; elke sectiekop in de accentkleur en in hoofdletters. Vaardigheden als nette losse regels (eventueel licht onderstreept) in de accentkleur; certificaten als bullets.
+Rechterkolom breed (ongeveer 60%): de sectiekop "Werkervaring" in de accentkleur; daaronder de functies als een verticale tijdlijn, dus een dunne verticale lijn met bij elke functie een klein rond icoontje (in de accentkleur). Per functie: de functietitel vet, daaronder "Werkgever, Plaats, Periode" in grijs, dan kleine bullets.
+Subtiel detail: een klein gekleurd hoekvlak linksonder in de accentkleur.
+Lettertype: strak geometrisch schreefloos (DM Sans, Inter). Accentkleur spaarzaam gebruiken: de contactregel, de koppen, de tijdlijn-icoontjes, de vaardigheden en het hoekvlak. Rustig, modern en heel goed leesbaar.`,
     kleuren:[
       {id:'blue',   naam:'Blauw',  hex:'#619DF9', img:'templates/previews/venture-blue.webp'},
       {id:'green',  naam:'Groen',  hex:'#419581', img:'templates/previews/venture-green.webp'},
@@ -66,7 +83,10 @@ const TEMPLATES = [
     id:'photo',
     naam:'Met foto',
     omschrijving:
-`Vriendelijk en modern, met nadruk op een foto. Kop met de naam groot in de accentkleur (sierlijk schreef-lettertype, Cormorant) en daaronder de functietitel, met een contactregel met icoontjes. Daaronder twee kolommen: een brede linkerkolom met een licht getinte achtergrond en de werkervaring als tijdlijn met datumblokjes aan de linkerkant; en een smalle rechterkolom met bovenaan een ronde foto, daarna een profieltekst, Opleiding en Vaardigheden als puntjes-rating (rijtjes gevulde en lege bolletjes). Lettertypes Cormorant SC met Source Sans of Inter. Geschikt voor zorg, welzijn, klantcontact en iedereen die met een foto op het cv wil.`,
+`Indeling: één A4, wit.
+Kop: links de naam groot in de accentkleur in een sierlijk schreef-lettertype (Cormorant), daaronder de functietitel in grijs; rechtsboven een ronde foto met een rand in de accentkleur. Onder de naam een contactregel met kleine accentkleurige icoontjes (telefoon, plaats, e-mail, website), verdeeld over twee kolommen.
+Daaronder twee kolommen. Linkerkolom breed (ongeveer 62%) met een heel lichte achtergrond in de accentkleur (zachte tint): de sectiekop "Werkervaring" in de accentkleur en in hoofdletters; de functies als een tijdlijn met links een klein omkaderd datumblokje (bijvoorbeeld "mei 2019 / heden"), daarnaast de functietitel in de accentkleur en vet, de werkgever in grijs, dan bullets. Rechterkolom smal (ongeveer 34%, wit): "Profiel" (accentkop) met een alinea, "Opleiding" (datum, opleiding vet, school) en "Vaardigheden" als rijen: de naam met daarnaast een rij van ongeveer tien bolletjes die tot het niveau gevuld zijn in de accentkleur en voor de rest lichtgrijs.
+Lettertype: Cormorant SC voor de naam en koppen (schreef, hoofdletters) met Source Sans of Inter voor de lopende tekst. Accentkleur in de naam, de koppen, de fotorand, de lichte linkerkolom, de datumblokjes en de vaardigheidsbolletjes. Vriendelijk, modern en met foto.`,
     kleuren:[
       {id:'blue',    naam:'Blauw',   hex:'#03396C', img:'templates/previews/photo-blue.webp'},
       {id:'teal',    naam:'Teal',    hex:'#217C7C', img:'templates/previews/photo-teal.webp'},
@@ -80,7 +100,10 @@ const TEMPLATES = [
     id:'fashionable',
     naam:'Trendy',
     omschrijving:
-`Trendy en eigentijds. Een smalle lichte linkerzijbalk met bovenaan een rechthoekige foto, daaronder een gekleurd accentblok, vervolgens contactgegevens met icoontjes, Opleiding, Vaardigheden en extra vaardigheden. Rechts de hoofdkolom: de naam met de voornaam in de accentkleur en de achternaam in zwart, daaronder de functietitel, een profieltekst, en de werkervaring met gekleurde afgeronde kop-labels (gevulde "pillen") en de periode rechts uitgelijnd; subtiele warme achtergrondtint. Lettertypes Arima, Raleway en Poppins. Geschikt voor creatieve functies, retail, horeca en jongere kandidaten.`,
+`Indeling: één A4, wit, met een smalle linkerzijbalk (ongeveer 30%) en een brede hoofdkolom rechts.
+Linkerzijbalk: bovenaan een rechthoekige (staande) foto over de volle balkbreedte, direct daaronder een gevuld blok in de accentkleur. Daaronder de contactgegevens met ronde accentkleurige icoontjes; dan "Opleiding", "Vaardigheden" en "Extra vaardigheden", met zwarte vette koppen in hoofdletters en bullet-lijsten.
+Hoofdkolom rechts: de naam groot, met de VOORNAAM in de accentkleur en de ACHTERNAAM in zwart; daaronder de functietitel klein en vet; dan een profieltekst. Daarna "Werkervaring": per functie een gevuld afgerond label (een "pill") in de accentkleur met de functietitel in wit erin, met de periode rechts uitgelijnd in grijs op dezelfde hoogte; daaronder werkgever en plaats in grijs, dan bullets. Subtiele warme achtergrondtint rechtsonder.
+Lettertype: een eigentijds display-lettertype (Arima) voor de naam, Raleway of Poppins voor de tekst. Accentkleur in de voornaam, het blok onder de foto, de icoontjes en de functietitel-labels. Trendy en eigentijds.`,
     kleuren:[
       {id:'blue',    naam:'Blauw',   hex:'#03396C', img:'templates/previews/fashionable-blue.webp'},
       {id:'green',   naam:'Groen',   hex:'#287878', img:'templates/previews/fashionable-green.webp'},
@@ -94,7 +117,10 @@ const TEMPLATES = [
     id:'colorful',
     naam:'Opvallend',
     omschrijving:
-`Opvallend en design-gericht. Een volledig gekleurde (donkere) linkerzijbalk over de hele hoogte met de naam groot bovenaan en verticaal gedraaide sectie-labels in "tabs" (Contact, Profiel, Opleiding, Vaardigheden). Rechts een brede kolom met de werkervaring, ook met een verticaal gedraaid label, en rechtsboven een zeshoekige (hexagon) foto. De accentkleur is de kleur van de hele zijbalk en de tabs. Naam in een schreef-lettertype (Bitter), tekst schreefloos (Inter, Lexend). Geschikt voor creatieve functies, retail, horeca en wie durft op te vallen.`,
+`Indeling: één A4. Een opvallende, volledig gevulde linkerzijbalk in de accentkleur (donker) over de hele hoogte (ongeveer 36% breed), met witte tekst; rechts een witte hoofdkolom.
+Linkerzijbalk: bovenaan de naam groot in wit in een schreef-lettertype (mag over twee regels), daaronder de functietitel in lichte tekst. Daarna de secties met verticaal (90 graden gedraaide) labels in kleine donkere "tabs" tegen de linkerrand: "Contact", "Profiel", "Opleiding" en "Vaardigheden". Naast elke tab de bijbehorende inhoud in witte tekst (contactgegevens, profielalinea, opleiding, vaardigheden als bullets).
+Hoofdkolom rechts: tegen de linkerrand van deze kolom een verticaal gedraaid label "Werkervaring" (donkere tab), daarnaast de functies: de functietitel vet en donker, "Werkgever, Plaats | Periode" in grijs, dan bullets. Rechtsboven, overlappend met de zijbalk, een zeshoekige (hexagon) foto.
+Lettertype: een schreef-lettertype (Bitter) voor de naam, schreefloos (Inter, Lexend) voor de tekst. De accentkleur vult de hele zijbalk en de gedraaide tabs, en omlijst de hexagon-foto. Design-gericht, zelfverzekerd en opvallend.`,
     kleuren:[
       {id:'blue',     naam:'Blauw',    hex:'#252A41', img:'templates/previews/colorful-blue.webp'},
       {id:'burgundy', naam:'Bordeaux', hex:'#5C010E', img:'templates/previews/colorful-burgundy.webp'},

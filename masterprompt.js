@@ -82,6 +82,8 @@ Bouw het cv zo nauwkeurig mogelijk volgens dat template na:
 - Blijf qua sfeer en structuur zo dicht mogelijk bij het origineel, maar vul het met de echte gegevens van de kandidaat.
 - Zorg dat het er ook netjes uitziet wanneer het in zwart-wit wordt afgedrukt.
 
+Je mag vrijheid nemen met de INDELING als de inhoud daarom vraagt, maar nooit met de STIJL. Het uiterlijk blijft trouw aan het template: dezelfde sfeer, kleur, lettertypekeuze, soort koppen, vorm en plek van de foto, en het soort opmaak (balk, zijbalk, tijdlijn, enzovoort). De indeling pas je aan op de hoeveelheid inhoud van deze kandidaat. Voorbeelden: passen er te veel vaardigheden in een smal balkje, zet ze dan in twee kolommen of kort de lijst in; is er heel veel werkervaring, geef de belangrijkste functies dan meer ruimte en vat oudere of minder relevante functies korter samen; is er juist weinig inhoud, vul de ruimte dan rustig op zonder het leeg te laten ogen. Een sectie mag je weglaten als de kandidaat er niets over heeft, en de volgorde of plaatsing van secties mag je licht verschuiven als dat beter past. Het eindresultaat moet er altijd verzorgd en evenwichtig uitzien en bij voorkeur op één A4 passen, in de herkenbare stijl van het gekozen template.
+
 Heeft de kandidaat geen opmaak gekozen, kies dan zelf een verzorgd, rustig en zakelijk ontwerp dat bij de kandidaat past.
 
 ---
