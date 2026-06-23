@@ -67,7 +67,10 @@ Gebruik altijd deze volgorde, en laat een onderdeel weg als de kandidaat er geen
 7. Persoonlijke kenmerken (op basis van wat de kandidaat heeft aangegeven)
 
 **Foto:**
-Als de kandidaat een foto heeft meegestuurd, plaats die op de plek en in de vorm die bij het gekozen template hoort (zie stap 3). Heeft de kandidaat geen foto, laat de fotoplek dan weg of houd hem leeg.
+Verwerk de foto afhankelijk van of de kandidaat er een heeft meegestuurd:
+
+- *Met foto:* Plaats de foto op de plek en in de vorm die bij het gekozen template hoort (zie stap 3). Zorg dat de foto netjes is bijgesneden, goed binnen het kader of de vorm van het template past en niet vervormd of uitgerekt wordt. Ontwerp de rest van het cv om de foto heen, zodat de naam, koppen, tekst en witruimte mooi op de foto aansluiten en het geheel in balans is.
+- *Zonder foto:* Gebruik géén placeholder, geen leeg kader, geen grijs vlak, geen silhouet en geen icoon op de plek waar normaal een foto zou staan. Ontwerp het cv volledig zonder foto. Vul de ruimte die daardoor vrijkomt op een natuurlijke manier op: geef de naam, de contactgegevens of de profieltekst wat meer ruimte, of herverdeel de kolommen en secties. Het cv moet er evenwichtig, compleet en verzorgd uitzien, zonder dat te zien is dat er ooit een fotoplek was.
 
 ---
 
@@ -76,13 +79,13 @@ Als de kandidaat een foto heeft meegestuurd, plaats die op de plek en in de vorm
 De kandidaat heeft een kant-en-klaar template (ontwerp) en een kleur gekozen. De volledige beschrijving daarvan staat onderaan, bij de gegevens van de kandidaat, onder het kopje "Door de deelnemer gekozen opmaak".
 
 Bouw het cv zo nauwkeurig mogelijk volgens dat template na:
-- Neem de indeling over: het aantal kolommen, de eventuele zijbalk, de plek van de naam en de koppen, en de plaats en vorm van de foto.
+- Neem de indeling over: het aantal kolommen, de eventuele zijbalk, de plek van de naam en de koppen, en de plaats en vorm van de foto. Heeft de kandidaat geen foto, volg dan de foto-instructie bij stap 2: laat de fotoplek vervallen zonder placeholder en herverdeel de ruimte, in plaats van het kader leeg te laten.
 - Neem het lettertypegevoel over (schreef of schreefloos, zoals in de beschrijving genoemd). Gebruik een vergelijkbaar, algemeen beschikbaar lettertype als het exacte lettertype niet beschikbaar is.
 - Gebruik de gekozen accentkleur consequent voor de koppen, balken of zijbalk, lijnen, icoontjes en accentvlakken. Houd de lopende tekst donker en goed leesbaar.
 - Blijf qua sfeer en structuur zo dicht mogelijk bij het origineel, maar vul het met de echte gegevens van de kandidaat.
 - Zorg dat het er ook netjes uitziet wanneer het in zwart-wit wordt afgedrukt.
 
-Je mag vrijheid nemen met de INDELING als de inhoud daarom vraagt, maar nooit met de STIJL. Het uiterlijk blijft trouw aan het template: dezelfde sfeer, kleur, lettertypekeuze, soort koppen, vorm en plek van de foto, en het soort opmaak (balk, zijbalk, tijdlijn, enzovoort). De indeling pas je aan op de hoeveelheid inhoud van deze kandidaat. Voorbeelden: passen er te veel vaardigheden in een smal balkje, zet ze dan in twee kolommen of kort de lijst in; is er heel veel werkervaring, geef de belangrijkste functies dan meer ruimte en vat oudere of minder relevante functies korter samen; is er juist weinig inhoud, vul de ruimte dan rustig op zonder het leeg te laten ogen. Een sectie mag je weglaten als de kandidaat er niets over heeft, en de volgorde of plaatsing van secties mag je licht verschuiven als dat beter past. Het eindresultaat moet er altijd verzorgd en evenwichtig uitzien en bij voorkeur op één A4 passen, in de herkenbare stijl van het gekozen template.
+Je mag vrijheid nemen met de INDELING als de inhoud daarom vraagt, maar nooit met de STIJL. Het uiterlijk blijft trouw aan het template: dezelfde sfeer, kleur, lettertypekeuze, soort koppen, de vorm en plek van een eventuele foto, en het soort opmaak (balk, zijbalk, tijdlijn, enzovoort). De indeling pas je aan op de hoeveelheid inhoud van deze kandidaat. Voorbeelden: passen er te veel vaardigheden in een smal balkje, zet ze dan in twee kolommen of kort de lijst in; is er heel veel werkervaring, geef de belangrijkste functies dan meer ruimte en vat oudere of minder relevante functies korter samen; is er juist weinig inhoud, vul de ruimte dan rustig op zonder het leeg te laten ogen. Een sectie mag je weglaten als de kandidaat er niets over heeft, en de volgorde of plaatsing van secties mag je licht verschuiven als dat beter past. Het eindresultaat moet er altijd verzorgd en evenwichtig uitzien en bij voorkeur op één A4 passen, in de herkenbare stijl van het gekozen template.
 
 Heeft de kandidaat geen opmaak gekozen, kies dan zelf een verzorgd, rustig en zakelijk ontwerp dat bij de kandidaat past.
 
