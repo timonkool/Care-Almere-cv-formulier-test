@@ -131,6 +131,32 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
 
 .testnote{background:var(--coral-100);border-left:4px solid var(--coral-500);padding:12px 16px;font-size:.85rem;color:var(--slate-700);margin:0;}
 
+/* vervolgstappen op de resultaatpagina */
+.next-title{font-size:1.15rem;font-weight:700;color:var(--text-strong);margin:28px 0 4px;}
+.next-intro{font-size:.92rem;color:var(--text-body);margin:0 0 16px;}
+.steps-next{list-style:none;counter-reset:s;padding:0;margin:0;}
+.steps-next>li{counter-increment:s;position:relative;padding:0 0 20px 52px;}
+.steps-next>li:last-child{padding-bottom:4px;}
+.steps-next>li::before{content:counter(s);position:absolute;left:0;top:0;width:34px;height:34px;
+  border-radius:50%;background:var(--teal-600);color:#fff;font-weight:800;font-size:1rem;
+  display:flex;align-items:center;justify-content:center;}
+.steps-next>li:not(:last-child)::after{content:"";position:absolute;left:16px;top:38px;bottom:2px;width:2px;background:var(--slate-200);}
+.steps-next .s-head{font-weight:700;color:var(--text-strong);font-size:1rem;margin:5px 0 4px;}
+.steps-next .s-body{font-size:.92rem;color:var(--text-body);margin:0;}
+.bot-links{display:flex;flex-wrap:wrap;gap:10px;margin:12px 0 2px;}
+.bot-btn{display:flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;flex:1 1 140px;
+  background:#fff;color:var(--teal-700);border:1.5px solid var(--teal-600);border-radius:var(--radius-md);
+  font-weight:700;font-size:.95rem;padding:12px 16px;min-height:48px;transition:background .15s,transform .1s;}
+.bot-btn:hover{background:var(--teal-50);}
+.bot-btn:active{transform:scale(.98);}
+.bot-note{font-size:.82rem;color:var(--text-muted);margin:8px 0 0;}
+.photo-tip{display:flex;gap:12px;align-items:flex-start;background:var(--teal-50);
+  border:1.5px solid var(--teal-100);border-left:4px solid var(--coral-500);
+  border-radius:var(--radius-md);padding:14px 16px;margin:6px 0 2px;}
+.photo-tip .pt-ico{font-size:1.5rem;line-height:1.1;flex:none;}
+.photo-tip .pt-text{font-size:.92rem;color:var(--slate-700);}
+.photo-tip .pt-text b{color:var(--teal-800);}
+
 @media (max-width:520px){.row2{grid-template-columns:1fr;} .hd{padding:24px 18px;} .body{padding:8px 18px 28px;} .progress{padding:12px 18px;}}
 </style>
 </head>
@@ -282,11 +308,46 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
       <div class="result-head">
         <div class="check">✓</div>
         <h2>Klaar! Dit is je verhaal.</h2>
-        <p>Hieronder staat de tekst die je in een chatbot plakt. De chatbot maakt er dan een cv en een motivatiebrief van. Druk op de knop, open je chatbot en plak.</p>
+        <p>Hieronder staat de tekst voor de chatbot. Volg de stappen, dan heb je zo je eigen cv en motivatiebrief.</p>
       </div>
       <button class="btn btn--brand btn--wide" id="copyBtn">Kopieer naar klembord</button>
       <div class="copybox" id="preview"></div>
-      <p class="testnote"><b>Let op (testversie):</b> de instructie voor de chatbot (de masterprompt) zit in dit blok verwerkt, inclusief het template en de kleur die je koos. De chatbot maakt er een Word-document (.docx) van dat je zelf kunt aanpassen.</p>
+
+      <h3 class="next-title">Wat doe je nu? Vijf kleine stappen</h3>
+      <p class="next-intro">Een chatbot is een website waar je iets typt en meteen antwoord krijgt. Je laat de chatbot van jouw tekst een cv maken. Volg de stappen rustig, eentje tegelijk.</p>
+
+      <ol class="steps-next">
+        <li>
+          <p class="s-head">1. Kopieer je tekst</p>
+          <p class="s-body">Klik hierboven op de groene knop "Kopieer naar klembord". Je tekst staat nu klaar om te plakken. Klaar? Ga door naar stap 2.</p>
+        </li>
+        <li>
+          <p class="s-head">2. Open een chatbot</p>
+          <p class="s-body">Kies er één. Beide zijn gratis. De knop opent in een nieuw tabblad, dit formulier blijft gewoon openstaan.</p>
+          <div class="bot-links">
+            <a class="bot-btn" href="https://chatgpt.com" target="_blank" rel="noopener">ChatGPT openen</a>
+            <a class="bot-btn" href="https://claude.ai" target="_blank" rel="noopener">Claude openen</a>
+          </div>
+          <p class="bot-note">Eerste keer? Soms moet je eenmalig een gratis account aanmaken met je e-mail.</p>
+        </li>
+        <li>
+          <p class="s-head">3. Voeg eerst een foto toe</p>
+          <div class="photo-tip">
+            <span class="pt-ico" aria-hidden="true">📸</span>
+            <span class="pt-text"><b>Sterk aangeraden:</b> voeg een foto van jezelf toe voordat je de tekst verstuurt. Klik op het plusje of het paperclip-icoon in de chatbot en kies een rustige, vriendelijke foto. Zo staat je foto meteen goed op je cv. Heb je geen foto? Dan werkt het ook prima zonder.</span>
+          </div>
+        </li>
+        <li>
+          <p class="s-head">4. Plak je tekst en verstuur</p>
+          <p class="s-body">Klik in het tekstvak van de chatbot. Op een telefoon houd je je vinger even ingedrukt en kies je "Plakken"; op een computer druk je Ctrl+V (of Cmd+V op een Mac). Druk daarna op verzenden. Je foto gaat dan vanzelf mee.</p>
+        </li>
+        <li>
+          <p class="s-head">5. Beantwoord de vragen en download je cv</p>
+          <p class="s-body">De chatbot stelt je nog een paar korte vragen. Beantwoord ze in je eigen woorden. Daarna krijg je een Word-bestand (.docx) dat je kunt opslaan, aanpassen en printen. Stuur het naar je jobcoach bij Care Almere, zij helpt je het af te ronden.</p>
+        </li>
+      </ol>
+
+      <p class="testnote" style="margin-top:24px;"><b>Let op (testversie):</b> de instructie voor de chatbot (de masterprompt) zit in de gekopieerde tekst verwerkt, inclusief het template en de kleur die je koos. Er wordt niets opgeslagen of verstuurd vanuit dit formulier.</p>
     </div>
 
     <div class="nav">
