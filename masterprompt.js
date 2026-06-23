@@ -72,6 +72,11 @@ Verwerk de foto afhankelijk van of de kandidaat er een heeft meegestuurd:
 - *Met foto:* Plaats de foto op de plek en in de vorm die bij het gekozen template hoort (zie stap 3). Zorg dat de foto netjes is bijgesneden, goed binnen het kader of de vorm van het template past en niet vervormd of uitgerekt wordt. Ontwerp de rest van het cv om de foto heen, zodat de naam, koppen, tekst en witruimte mooi op de foto aansluiten en het geheel in balans is.
 - *Zonder foto:* Gebruik géén placeholder, geen leeg kader, geen grijs vlak, geen silhouet en geen icoon op de plek waar normaal een foto zou staan. Ontwerp het cv volledig zonder foto. Vul de ruimte die daardoor vrijkomt op een natuurlijke manier op: geef de naam, de contactgegevens of de profieltekst wat meer ruimte, of herverdeel de kolommen en secties. Het cv moet er evenwichtig, compleet en verzorgd uitzien, zonder dat te zien is dat er ooit een fotoplek was.
 
+**Nog door de kandidaat zelf in te vullen:**
+De kandidaat kan sommige gegevens bewust hebben overgeslagen om ze later zelf in het Word-document aan te vullen. Die staan in de gegevens hieronder met de tekst "[Zelf invullen]", bijvoorbeeld bij de naam, het telefoonnummer of de woonplaats.
+
+Verzin voor zulke velden niets en laat de plek niet weg. Zet op precies die plek in het cv de tekst **[Zelf invullen]** in vetgedrukte letters, zodat de kandidaat in één oogopslag ziet wat hij nog zelf moet aanvullen. Houd de opmaak eromheen (kop, kolom, regel, het label zoals "Telefoon") gewoon intact, alsof het gegeven er al staat. Plaats de bovenste regel met naam en contactgegevens dus altijd, ook als die nog "[Zelf invullen]" bevat.
+
 ---
 
 ### STAP 3 — OPMAAK: BOUW HET GEKOZEN TEMPLATE NA
@@ -104,4 +109,4 @@ Het document moet:
 
 Lever het .docx-bestand op als eindresultaat, zodat de kandidaat het zelf verder kan aanpassen.
 
-Schrijf aan het einde van de chat, nadat je het cv hebt gemaakt, één korte zin om de kandidaat te complimenteren met wat er goed aan het cv is. Geef daarna één praktische tip voor de volgende stap, bijvoorbeeld: "Stuur je cv naar je jobcoach bij Care Almere, zij helpt je het af te ronden."`;
+Schrijf aan het einde van de chat, nadat je het cv hebt gemaakt, één korte zin om de kandidaat te complimenteren met wat er goed aan het cv is. Staan er nog "[Zelf invullen]"-plekken in het cv, wijs de kandidaat daar dan vriendelijk op, bijvoorbeeld: "Vergeet niet je naam en contactgegevens bovenaan zelf nog in te vullen op de plekken waar [Zelf invullen] staat." Geef daarna één praktische tip voor de volgende stap, bijvoorbeeld: "Stuur je cv naar je jobcoach bij Care Almere, zij helpt je het af te ronden."`;

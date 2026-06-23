@@ -114,6 +114,16 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
 
 .skip-hint{text-align:center;font-size:.85rem;color:var(--text-muted);margin:14px 0 0;}
 
+/* verplicht-veld-validatie + 'later zelf invullen' */
+.btn--block{width:100%;}
+.skip-note{font-size:.85rem;color:var(--text-muted);text-align:center;margin:10px 0 2px;}
+.skip-note b{color:var(--text-strong);}
+.val-msg{display:none;background:var(--red-50);color:var(--red-700);border:1.5px solid var(--red-600);
+  border-radius:var(--radius-md);padding:11px 15px;font-size:.92rem;font-weight:600;margin:18px 0 0;}
+.val-msg.show{display:block;}
+.invalid{border-color:var(--red-600)!important;box-shadow:0 0 0 3px var(--red-50)!important;}
+.chips-invalid{outline:2px solid var(--red-600);outline-offset:6px;border-radius:var(--radius-md);}
+
 /* result */
 .result-head{text-align:center;padding:10px 0 4px;}
 .result-head .check{width:54px;height:54px;border-radius:50%;background:var(--teal-100);color:var(--teal-700);
@@ -194,6 +204,8 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
         <div><label class="field-label">E-mail <span style="font-weight:400;color:var(--text-muted)">(als je die hebt)</span></label><input type="email" id="mail" placeholder="naam@voorbeeld.nl"></div>
         <div><label class="field-label">Geboortedatum</label><input type="date" id="dob"></div>
       </div>
+      <button class="btn btn--ghost btn--block" id="skipPersonal" type="button" style="margin-top:20px;">Ik vul mijn gegevens later zelf in</button>
+      <p class="skip-note">Je gaat dan verder zonder naam en contact. In je cv komt op die plekken <b>[Zelf invullen]</b> te staan, dat vul je later zelf aan.</p>
     </div>
 
     <!-- STEP 2: werk + opleiding -->
@@ -350,6 +362,8 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
       <p class="infonote" style="margin-top:24px;"><b>Let op:</b> de instructie voor de chatbot (de masterprompt) zit in de gekopieerde tekst verwerkt, inclusief het template en de kleur die je koos. Er wordt niets opgeslagen of verstuurd vanuit dit formulier.</p>
     </div>
 
+    <p class="val-msg" id="valMsg"></p>
+
     <div class="nav">
       <button class="btn btn--ghost" id="prevBtn">Terug</button>
       <button class="btn btn--primary" id="nextBtn">Volgende</button>
@@ -384,12 +398,69 @@ function render(){
   if(onResult) buildPreview();
   window.scrollTo({top:0,behavior:'smooth'});
 }
-prevBtn.onclick=()=>{ if(cur>0){cur--;render();} };
-nextBtn.onclick=()=>{ if(cur<7){cur++;render();} else {cur=0;render();} };
+/* verplichte velden per stap: elke Blok 1-stap heeft minstens één verplicht
+   veld. Pagina 1 kun je overslaan met de 'later zelf invullen'-knop. */
+const valMsg=document.getElementById('valMsg');
+function clearVal(){
+  valMsg.classList.remove('show');
+  document.querySelectorAll('.invalid').forEach(e=>e.classList.remove('invalid'));
+  document.querySelectorAll('.chips-invalid').forEach(e=>e.classList.remove('chips-invalid'));
+}
+function firstInvalid(step){
+  if(step===0){
+    if(!v('naam')) return {el:'naam', msg:'Vul je naam in, of kies hieronder "Ik vul mijn gegevens later zelf in".'};
+    if(!v('tel')) return {el:'tel', msg:'Vul je telefoonnummer in, of kies "Ik vul mijn gegevens later zelf in".'};
+    if(!v('plaats')) return {el:'plaats', msg:'Vul je woonplaats in, of kies "Ik vul mijn gegevens later zelf in".'};
+    return null;
+  }
+  if(step===1){
+    const anyExp=Array.from(document.querySelectorAll('.exp-wat')).some(e=>e.value.trim());
+    if(anyExp||v('opleiding')) return null;
+    return {sel:'.exp-wat', msg:'Vul minstens één werk of ervaring in, of je school of cursus.'};
+  }
+  if(step===2){
+    if(chipsVal('talen').length) return null;
+    return {chips:'talen', msg:'Kies minstens één taal die je spreekt, of typ er een.'};
+  }
+  if(step===3){
+    if(v('taak')||v('helpen')) return null;
+    return {el:'taak', msg:'Schrijf iets dat je vaak deed, of wie je hebt geholpen.'};
+  }
+  if(step===4){
+    if(chipsVal('apparaten').length||chipsVal('overjou').length||chipsVal('nietmeer').length) return null;
+    return {chips:'overjou', msg:'Tik op deze pagina minstens één antwoord aan.'};
+  }
+  if(step===6){
+    if(selected) return null;
+    return {msg:'Kies eerst een ontwerp voor je cv.'};
+  }
+  return null;
+}
+function showInvalid(bad){
+  clearVal();
+  valMsg.textContent=bad.msg; valMsg.classList.add('show');
+  let target=null;
+  if(bad.el) target=document.getElementById(bad.el);
+  else if(bad.sel) target=document.querySelector(bad.sel);
+  else if(bad.chips) target=document.querySelector(`[data-chips="${bad.chips}"]`);
+  if(target){ target.classList.add(bad.chips?'chips-invalid':'invalid'); }
+  (target||valMsg).scrollIntoView({behavior:'smooth',block:'center'});
+  if(target&&target.focus){ try{target.focus({preventScroll:true});}catch(e){} }
+}
+prevBtn.onclick=()=>{ if(cur>0){clearVal();cur--;render();} };
+nextBtn.onclick=()=>{
+  if(cur<7){
+    const bad=firstInvalid(cur);
+    if(bad){ showInvalid(bad); return; }
+    clearVal(); cur++; render();
+  } else { cur=0; render(); }
+};
+document.getElementById('skipPersonal').onclick=()=>{ clearVal(); cur=1; render(); };
+document.querySelector('.body').addEventListener('input', clearVal);
 
 /* chips */
 document.querySelectorAll('.chip').forEach(c=>{
-  c.onclick=()=>c.classList.toggle('on');
+  c.onclick=()=>{ c.classList.toggle('on'); clearVal(); };
 });
 
 /* experience repeater */
@@ -441,9 +512,9 @@ function renderTemplates(){
       +`<div class="tpl-name">${t.naam}</div>`
       +`<div class="tpl-chosen">${chosen?'Gekozen: '+col.naam:''}</div>`
       +`<div class="tpl-swatches">${sw}</div>`;
-    card.querySelector('.tpl-preview').onclick=()=>{ selected={tpl:t.id,color:activeColor}; renderTemplates(); };
+    card.querySelector('.tpl-preview').onclick=()=>{ selected={tpl:t.id,color:activeColor}; clearVal(); renderTemplates(); };
     card.querySelectorAll('.tpl-swatch').forEach(s=>{
-      s.onclick=(e)=>{ e.stopPropagation(); selected={tpl:t.id,color:s.dataset.c}; renderTemplates(); };
+      s.onclick=(e)=>{ e.stopPropagation(); selected={tpl:t.id,color:s.dataset.c}; clearVal(); renderTemplates(); };
     });
     grid.appendChild(card);
   });
@@ -486,7 +557,7 @@ function gather(){
     return block;
   }).filter(Boolean);
   return {
-    naam:v('naam'),tel:v('tel'),plaats:v('plaats'),mail:v('mail'),dob:dateNL(v('dob')),
+    naam:v('naam')||'[Zelf invullen]',tel:v('tel')||'[Zelf invullen]',plaats:v('plaats')||'[Zelf invullen]',mail:v('mail'),dob:dateNL(v('dob')),
     exp,opleiding:v('opleiding'),
     papieren:chipsVal('papieren'),talen:chipsVal('talen'),apparaten:chipsVal('apparaten'),
     overjou:chipsVal('overjou'),nietmeer:chipsVal('nietmeer'),
