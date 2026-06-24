@@ -32,8 +32,9 @@ Houd dit minimaal. Maak geen nieuwe mappen of bestanden aan zonder expliciete go
 ```
 /
 ├── index.html          # Het volledige formulier: opmaak (inline CSS) + logica (inline JS)
-├── masterprompt.js     # De masterprompt als losse constante (zie sectie 4)
-├── templates.js        # De zes cv-templates + kleurvarianten + beschrijvingen (stap 7)
+├── masterprompt.js     # De cv-masterprompt als losse constante (zie sectie 4)
+├── masterprompt-motivatiebrief.js # De motivatiebrief-masterprompt als losse constante (zie sectie 4)
+├── templates.js        # De zes cv-templates + kleurvarianten + beschrijvingen (laatste stap)
 ├── templates/previews/ # Preview-afbeeldingen per template/kleur (.webp), gerenderd uit de Word-templates
 ├── CLAUDE.md           # Dit document
 └── README.md           # Korte uitleg van de repo
@@ -41,7 +42,7 @@ Houd dit minimaal. Maak geen nieuwe mappen of bestanden aan zonder expliciete go
 
 Het formulier is bewust één bestand. Splits `index.html` niet op in losse CSS/JS-bestanden zonder dat eerst voor te leggen; de eenvoud van één bestand is hier een feature, niet een tekortkoming.
 
-De enige bewuste uitzondering is de masterprompt, die in een apart bestand staat (`masterprompt.js`), omdat die los van het formulier vaak verandert. Zie sectie 4.
+De enige bewuste uitzondering zijn de masterprompts, die in aparte bestanden staan (`masterprompt.js` voor het cv en `masterprompt-motivatiebrief.js` voor de motivatiebrief), omdat die los van het formulier vaak veranderen. Bij afronden bouwt `index.html` één gedeeld gegevensblok van de kandidaat en plakt dat achter elke masterprompt; zo ontstaan twee te kopiëren teksten (cv en motivatiebrief). Zie sectie 4.
 
 \---
 

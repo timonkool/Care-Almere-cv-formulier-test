@@ -64,6 +64,16 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
 .chip{cursor:pointer;user-select:none;border:1.5px solid var(--slate-300);background:#fff;color:var(--slate-700);
   padding:9px 14px;border-radius:var(--radius-pill);font-size:.9rem;font-weight:600;transition:all .15s;min-height:40px;display:inline-flex;align-items:center;}
 .chip:hover{border-color:var(--color-brand);}
+.chip:focus-visible,.tpl-preview:focus-visible,.tpl-swatch:focus-visible,.lvl-btn:focus-visible{outline:3px solid var(--teal-700);outline-offset:2px;}
+
+/* taalniveau per gekozen taal */
+.taal-niveaus{margin:10px 0 2px;}
+.taal-row{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:8px 0;}
+.taal-row .tn-name{font-weight:600;color:var(--text-strong);font-size:.92rem;min-width:96px;}
+.lvl-btn{cursor:pointer;border:1.5px solid var(--slate-300);background:#fff;color:var(--slate-700);
+  padding:7px 13px;border-radius:var(--radius-pill);font-size:.85rem;font-weight:600;min-height:38px;font-family:var(--font-sans);}
+.lvl-btn:hover{border-color:var(--color-brand);}
+.lvl-btn.on{background:var(--teal-600);border-color:var(--teal-600);color:#fff;}
 .chip.on{background:var(--teal-600);border-color:var(--teal-600);color:#fff;}
 .chip-note{font-size:.82rem;color:var(--text-muted);margin:6px 0 0;}
 .open-extra{margin-top:8px;}
@@ -99,7 +109,8 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
   color:#fff;font-size:.8rem;font-weight:800;text-shadow:0 1px 2px rgba(0,0,0,.45);}
 
 /* nav */
-.nav{display:flex;justify-content:space-between;gap:12px;margin-top:26px;padding-top:18px;border-top:1px solid var(--slate-200);}
+.nav{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;margin-top:26px;padding-top:18px;border-top:1px solid var(--slate-200);}
+.nav-right{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:12px;}
 .btn{font-family:var(--font-sans);font-weight:700;border:none;cursor:pointer;border-radius:var(--radius-sm);
   font-size:1rem;padding:12px 22px;min-height:48px;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:background .2s,transform .1s;}
 .btn:active{transform:scale(.98);}
@@ -173,6 +184,13 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
 .photo-tip .pt-text{font-size:.92rem;color:var(--slate-700);}
 .photo-tip .pt-text b{color:var(--teal-800);}
 
+/* twee kolommen op de resultaatpagina: links cv, rechts motivatiebrief */
+.result-cols{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:8px 0 2px;align-items:start;}
+.result-col{display:flex;flex-direction:column;}
+.rc-title{font-size:1.02rem;font-weight:700;color:var(--text-strong);margin:0 0 4px;}
+.rc-sub{font-size:.85rem;color:var(--text-muted);margin:0 0 10px;}
+.result-col .copybox{margin:12px 0 0;}
+
 /* iteratie-tips met kopieerbare prompts op de resultaatpagina */
 .iter{border:1.5px solid var(--teal-100);background:var(--teal-50);border-radius:var(--radius-md);padding:14px 16px;margin:0 0 12px;}
 .iter-head{font-weight:700;color:var(--text-strong);font-size:.96rem;margin:0 0 8px;}
@@ -189,15 +207,16 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
 .read-first .rf-ico{font-size:1.6rem;line-height:1;flex:none;}
 .read-first b{font-weight:800;}
 
-@media (max-width:520px){.row2{grid-template-columns:1fr;} .hd{padding:24px 18px;} .body{padding:8px 18px 28px;} .progress{padding:12px 18px;}}
+@media (max-width:520px){.row2{grid-template-columns:1fr;} .hd{padding:24px 18px;} .body{padding:8px 18px 28px;} .progress{padding:12px 18px;}
+  .result-cols{grid-template-columns:1fr;} .nav-right{width:100%;} .nav-right .btn{flex:1 1 auto;}}
 </style>
 </head>
 <body>
 <div class="app">
 
   <div class="progress">
-    <div class="bar"><div class="fill" id="fill"></div></div>
-    <div class="label"><span id="stepLabel">Stap 1 van 6</span><span id="blockLabel">Verplicht</span></div>
+    <div class="bar" role="progressbar" aria-label="Voortgang" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0" id="bar"><div class="fill" id="fill"></div></div>
+    <div class="label"><span id="stepLabel">Stap 1 van 8</span><span id="blockLabel">Verplicht</span></div>
   </div>
 
   <div class="hd">
@@ -208,7 +227,7 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
   </div>
 
   <div class="body">
-    <p class="infonote" style="margin:14px 0 0;"><b>Je antwoorden blijven privé.</b> Ze worden nergens opgeslagen of verstuurd; aan het eind kun je ze met één druk op de knop naar je klembord kopiëren.</p>
+    <p class="infonote" style="margin:14px 0 0;"><b>Je antwoorden blijven privé.</b> Ze worden nergens opgeslagen of verstuurd; aan het eind kun je ze met één druk op de knop naar je klembord kopiëren. <b>Sluit dit tabblad niet tussendoor</b>, je antwoorden worden bewust niet bewaard en zijn dan weg.</p>
 
     <!-- STEP 1 -->
     <div class="step active" data-step="0" data-block="req">
@@ -216,22 +235,36 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
       <p class="block-intro">Deze vragen vormen samen je cv.</p>
       <h2 class="q-title">Hoe kunnen we je bereiken?</h2>
       <p class="q-hint">Adres hoeft niet, je woonplaats is genoeg.</p>
-      <label class="field-label">Voor- en achternaam</label>
+      <label class="field-label" for="naam">Voor- en achternaam</label>
       <input type="text" id="naam" placeholder="Bijvoorbeeld: Fatima El Amrani">
       <div class="row2">
-        <div><label class="field-label">Telefoon</label><input type="tel" id="tel" placeholder="06 ..."></div>
-        <div><label class="field-label">Woonplaats</label><input type="text" id="plaats" placeholder="Almere"></div>
+        <div><label class="field-label" for="tel">Telefoon</label><input type="tel" id="tel" placeholder="06 ..."></div>
+        <div><label class="field-label" for="plaats">Woonplaats</label><input type="text" id="plaats" placeholder="Almere"></div>
       </div>
       <div class="row2">
-        <div><label class="field-label">E-mail <span style="font-weight:400;color:var(--text-muted)">(als je die hebt)</span></label><input type="email" id="mail" placeholder="naam@voorbeeld.nl"></div>
-        <div><label class="field-label">Geboortedatum</label><input type="date" id="dob"></div>
+        <div><label class="field-label" for="mail">E-mail <span style="font-weight:400;color:var(--text-muted)">(als je die hebt)</span></label><input type="email" id="mail" placeholder="naam@voorbeeld.nl"></div>
+        <div><label class="field-label" for="dob">Geboortedatum <span style="font-weight:400;color:var(--text-muted)">(hoeft niet)</span></label><input type="text" id="dob" inputmode="numeric" autocomplete="bday" placeholder="dd-mm-jjjj"></div>
       </div>
-      <button class="btn btn--ghost btn--block" id="skipPersonal" type="button" style="margin-top:20px;">Ik vul mijn gegevens later zelf in</button>
-      <p class="skip-note">Je gaat dan verder zonder naam en contact. In je cv komt op die plekken <b>[Zelf invullen]</b> te staan, dat vul je later zelf aan.</p>
+      <p class="chip-note" style="margin-top:6px;">Je geboortedatum is niet verplicht. Je leeftijd weglaten kan zelfs helpen, want sommige werkgevers laten zich daardoor onbewust beïnvloeden.</p>
+      <p class="skip-note" style="margin-top:18px;">Geen naam of contactgegevens bij de hand? Gebruik de groene knop <b>"Ik vul mijn gegevens later zelf in"</b> onderaan. In je cv komt op die plekken <b>[Zelf invullen]</b> te staan, dat vul je later zelf aan.</p>
     </div>
 
-    <!-- STEP 2: werk + opleiding -->
+    <!-- STEP 2: wat voor werk zoek je -->
     <div class="step" data-step="1" data-block="req">
+      <span class="block-tag block-tag--req">Blok 1 · Verplicht</span>
+      <h2 class="q-title">Wat voor werk zoek je?</h2>
+      <p class="q-hint">Tik aan wat je zou willen doen. Je mag er meer kiezen. Weet je het nog niet? Dat mag ook.</p>
+      <div class="chips" data-chips="zoek">
+        <span class="chip">Zorg en welzijn</span><span class="chip">Schoonmaak</span><span class="chip">Magazijn / logistiek</span>
+        <span class="chip">Productie / fabriek</span><span class="chip">Winkel / klantcontact</span><span class="chip">Horeca / keuken</span>
+        <span class="chip">Techniek / bouw</span><span class="chip">Groen / buiten</span><span class="chip">Administratie</span>
+        <span class="chip">Weet ik nog niet</span>
+      </div>
+      <div class="open-extra"><input type="text" data-openfor="zoek" aria-label="Een ander soort werk of een specifieke baan" placeholder="Iets anders, of een specifieke baan? Typ het hier."></div>
+    </div>
+
+    <!-- STEP 3: werk + opleiding -->
+    <div class="step" data-step="2" data-block="req">
       <span class="block-tag block-tag--req">Blok 1 · Verplicht</span>
       <h2 class="q-title">Werk dat je gedaan hebt</h2>
       <p class="q-hint">Tel ook mee: vrijwilligerswerk, stage, mantelzorg, meewerken in een familiebedrijf, klussen voor anderen.</p>
@@ -242,11 +275,11 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
       <h2 class="q-title" style="margin-top:26px;">School en cursussen</h2>
       <p class="q-hint">Een diploma is niet verplicht. Ook een korte cursus telt mee.</p>
       <div class="example">Bijvoorbeeld: <b>vmbo niet afgemaakt, wel een heftruckcursus gehaald</b>.</div>
-      <textarea id="opleiding" placeholder="Schrijf op welke school of cursus je gedaan hebt, en of je een diploma hebt."></textarea>
+      <textarea id="opleiding" aria-label="School en cursussen" placeholder="Schrijf op welke school of cursus je gedaan hebt, en of je een diploma hebt."></textarea>
     </div>
 
-    <!-- STEP 3: papieren + talen -->
-    <div class="step" data-step="2" data-block="req">
+    <!-- STEP 4: papieren + talen -->
+    <div class="step" data-step="3" data-block="req">
       <span class="block-tag block-tag--req">Blok 1 · Verplicht</span>
       <h2 class="q-title">Papieren en pasjes</h2>
       <p class="q-hint">Tik aan wat je hebt. Mis je er een? Vul hem zelf aan.</p>
@@ -254,35 +287,38 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
         <span class="chip">Rijbewijs B</span><span class="chip">Heftruck</span><span class="chip">VCA</span>
         <span class="chip">BHV / EHBO</span><span class="chip">Taalcertificaat</span>
       </div>
-      <div class="open-extra"><input type="text" data-openfor="papieren" placeholder="Andere papieren of pasjes? Typ ze hier."></div>
+      <div class="open-extra"><input type="text" data-openfor="papieren" aria-label="Andere papieren of pasjes" placeholder="Andere papieren of pasjes? Typ ze hier."></div>
 
       <h2 class="q-title" style="margin-top:26px;">Talen die je spreekt</h2>
       <p class="q-hint">Thuis, met vrienden, of voor anderen bellen telt allemaal mee.</p>
       <div class="chips" data-chips="talen">
-        <span class="chip">Nederlands</span><span class="chip">Engels</span><span class="chip">Arabisch</span>
-        <span class="chip">Turks</span><span class="chip">Pools</span><span class="chip">Russisch</span>
+        <span class="chip">Nederlands</span><span class="chip">Engels</span><span class="chip">Frans</span>
+        <span class="chip">Duits</span><span class="chip">Arabisch</span><span class="chip">Turks</span>
+        <span class="chip">Pools</span><span class="chip">Russisch</span><span class="chip">Oekraïens</span>
         <span class="chip">Chinees</span><span class="chip">Berbers</span><span class="chip">Spaans</span>
-        <span class="chip">Papiaments</span><span class="chip">Hindoestani</span>
+        <span class="chip">Papiaments</span><span class="chip">Hindoestani</span><span class="chip">Farsi/Dari</span>
+        <span class="chip">Tigrinya</span><span class="chip">Somalisch</span>
       </div>
-      <div class="open-extra"><input type="text" data-openfor="talen" placeholder="Andere taal? En hoe goed (een beetje / goed / heel goed)?"></div>
+      <div class="open-extra"><input type="text" data-openfor="talen" aria-label="Andere taal" placeholder="Andere taal? Typ hem hier."></div>
+      <div class="taal-niveaus" id="taalNiveaus"></div>
     </div>
 
-    <!-- STEP 4: taken + helpen -->
-    <div class="step" data-step="3" data-block="req">
+    <!-- STEP 5: taken + helpen -->
+    <div class="step" data-step="4" data-block="req">
       <span class="block-tag block-tag--req">Blok 1 · Verplicht</span>
       <h2 class="q-title">Wat je vaak deed</h2>
       <p class="q-hint">Kies iets dat je vaak deed, op werk of thuis.</p>
       <div class="example">Bijvoorbeeld: <b>elke ochtend voor 10 mensen ontbijt klaarmaken</b>, of <b>elke week de planning maken voor vier collega's</b>.</div>
-      <textarea id="taak" placeholder="Wat deed je vaak? Schrijf er ook bij hoe vaak (per dag/week) en hoe lang per keer."></textarea>
+      <textarea id="taak" aria-label="Wat je vaak deed" placeholder="Wat deed je vaak? Schrijf er ook bij hoe vaak (per dag/week) en hoe lang per keer."></textarea>
 
       <h2 class="q-title" style="margin-top:26px;">Wie je hielp of op weg zette</h2>
       <p class="q-hint">Op het werk, in de buurt of in de familie, alles telt.</p>
       <div class="example">Bijvoorbeeld: <b>een nieuwe collega ingewerkt</b>, of <b>mijn buurman geholpen met zijn post</b>.</div>
-      <textarea id="helpen" placeholder="Heb je weleens iemand iets geleerd, ingewerkt of geholpen? Wie, en wat?"></textarea>
+      <textarea id="helpen" aria-label="Wie je hielp of op weg zette" placeholder="Heb je weleens iemand iets geleerd, ingewerkt of geholpen? Wie, en wat?"></textarea>
     </div>
 
-    <!-- STEP 5: apparaten + sterke punten + niet meer -->
-    <div class="step" data-step="4" data-block="req">
+    <!-- STEP 6: apparaten + sterke punten + niet meer -->
+    <div class="step" data-step="5" data-block="req">
       <span class="block-tag block-tag--req">Blok 1 · Verplicht</span>
       <h2 class="q-title">Apparaten en programma's</h2>
       <p class="q-hint">Ook een kassa of een app op je telefoon telt mee.</p>
@@ -290,7 +326,7 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
         <span class="chip">Kassasysteem</span><span class="chip">Apps op telefoon</span><span class="chip">Planningsapp</span>
         <span class="chip">Machines</span><span class="chip">Computer / Office</span><span class="chip">Heftruck</span>
       </div>
-      <div class="open-extra"><input type="text" data-openfor="apparaten" placeholder="Iets anders waar je mee gewerkt hebt? Typ het hier."></div>
+      <div class="open-extra"><input type="text" data-openfor="apparaten" aria-label="Ander apparaat of programma waar je mee gewerkt hebt" placeholder="Iets anders waar je mee gewerkt hebt? Typ het hier."></div>
 
       <h2 class="q-title" style="margin-top:26px;">Wat anderen over je zeggen</h2>
       <p class="q-hint">Tik aan wat past. Je mag er ook zelf een toevoegen.</p>
@@ -298,7 +334,7 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
         <span class="chip">Rustig</span><span class="chip">Behulpzaam</span><span class="chip">Precies</span><span class="chip">Snel</span>
         <span class="chip">Geduldig</span><span class="chip">Betrouwbaar</span><span class="chip">Vrolijk</span><span class="chip">Doorzetter</span>
       </div>
-      <div class="open-extra"><input type="text" data-openfor="overjou" placeholder="Zegt iemand iets anders vaak over jou? Typ het hier."></div>
+      <div class="open-extra"><input type="text" data-openfor="overjou" aria-label="Wat anderen nog meer over je zeggen" placeholder="Zegt iemand iets anders vaak over jou? Typ het hier."></div>
 
       <h2 class="q-title" style="margin-top:26px;">Wat je liever niet meer doet</h2>
       <p class="q-hint">Zo zoeken we werk dat beter bij je past.</p>
@@ -306,30 +342,47 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
         <span class="chip">Avonddiensten</span><span class="chip">Veel mensen tegelijk</span><span class="chip">Zwaar tillen</span>
         <span class="chip">Wisselende tijden</span><span class="chip">Alleen werken</span>
       </div>
-      <div class="open-extra"><input type="text" data-openfor="nietmeer" placeholder="Iets anders, of waarom? Bijvoorbeeld: geen nachtdiensten, want ik zorg 's ochtends voor mijn kinderen."></div>
+      <div class="open-extra"><input type="text" data-openfor="nietmeer" aria-label="Wat je liever niet meer doet, of waarom" placeholder="Iets anders, of waarom? Bijvoorbeeld: geen nachtdiensten, want ik zorg 's ochtends voor mijn kinderen."></div>
     </div>
 
-    <!-- STEP 6: optioneel blok 2 -->
-    <div class="step" data-step="5" data-block="opt">
+    <!-- STEP 7: optioneel blok 2 -->
+    <div class="step" data-step="6" data-block="opt">
       <span class="block-tag block-tag--opt">Blok 2 · Optioneel</span>
       <p class="block-intro">Deze vragen hoef je niet in te vullen. Ze maken je cv persoonlijker en helpen je jobcoach. Geen tijd of zin? Sla ze gerust over, je cv is al compleet.</p>
 
-      <h2 class="q-title">Een keer dat het spannend werd</h2>
+      <h2 class="q-title">Wanneer en hoeveel kun je werken?</h2>
+      <p class="q-hint">Tik aan wat past. Dit helpt je jobcoach bij het zoeken naar werk.</p>
+      <label class="field-label">Hoeveel uur per week wil je werken?</label>
+      <div class="chips" data-chips="uren">
+        <span class="chip">Fulltime (32-40 uur)</span><span class="chip">Parttime (tot 32 uur)</span><span class="chip">In overleg</span>
+      </div>
+      <label class="field-label" style="margin-top:14px;">Wanneer kun je beginnen?</label>
+      <div class="chips" data-chips="starten">
+        <span class="chip">Direct</span><span class="chip">Binnen een maand</span><span class="chip">In overleg</span>
+      </div>
+      <label class="field-label" style="margin-top:14px;">Hoe kom je naar je werk?</label>
+      <div class="chips" data-chips="vervoer">
+        <span class="chip">Eigen auto</span><span class="chip">Fiets</span><span class="chip">Brommer / scooter</span>
+        <span class="chip">Openbaar vervoer</span><span class="chip">Te voet</span>
+      </div>
+      <div class="open-extra"><input type="text" data-openfor="vervoer" aria-label="Hoe ver wil je reizen" placeholder="Hoe ver wil je reizen? Bijvoorbeeld: tot 30 minuten."></div>
+
+      <h2 class="q-title" style="margin-top:26px;">Een keer dat het spannend werd</h2>
       <div class="example">Bijvoorbeeld: <b>een klant werd boos en ik heb hem rustig geholpen</b>, of <b>de planning klopte niet en ik heb het opgelost</b>.</div>
-      <textarea id="opt_spannend" placeholder="Is er weleens iets misgegaan op werk of thuis? Wat deed je toen? (mag je overslaan)"></textarea>
+      <textarea id="opt_spannend" aria-label="Een keer dat het spannend werd" placeholder="Is er weleens iets misgegaan op werk of thuis? Wat deed je toen? (mag je overslaan)"></textarea>
 
       <h2 class="q-title" style="margin-top:24px;">Geleerd van iemand om je heen</h2>
       <div class="example">Bijvoorbeeld: <b>mijn oma leerde me koken voor grote groepen</b>.</div>
-      <textarea id="opt_geleerd" placeholder="Heeft iemand je iets geleerd buiten school of werk om? Wat, en van wie? (mag je overslaan)"></textarea>
+      <textarea id="opt_geleerd" aria-label="Geleerd van iemand om je heen" placeholder="Heeft iemand je iets geleerd buiten school of werk om? Wat, en van wie? (mag je overslaan)"></textarea>
 
       <h2 class="q-title" style="margin-top:24px;">Een keer dat je voor jezelf opkwam</h2>
-      <textarea id="opt_grens" placeholder="Heb je weleens nee gezegd tegen iets dat niet ging? Tegen wie, en hoe ging dat? (mag je overslaan)"></textarea>
+      <textarea id="opt_grens" aria-label="Een keer dat je voor jezelf opkwam" placeholder="Heb je weleens nee gezegd tegen iets dat niet ging? Tegen wie, en hoe ging dat? (mag je overslaan)"></textarea>
 
       <p class="skip-hint">Klaar, of geen zin meer? Klik op volgende, daarna kies je nog hoe je cv eruitziet.</p>
     </div>
 
-    <!-- STEP 7: template- en kleurkeuze -->
-    <div class="step" data-step="6" data-block="req">
+    <!-- STEP 8: template- en kleurkeuze -->
+    <div class="step" data-step="7" data-block="req">
       <span class="block-tag block-tag--req">Laatste stap · Kies je opmaak</span>
       <h2 class="q-title">Hoe wil je dat je cv eruitziet?</h2>
       <p class="q-hint">Kies een ontwerp dat je mooi vindt. Tik daarna onder dat ontwerp op een kleur, dan zie je het voorbeeld in die kleur.</p>
@@ -339,7 +392,7 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
     </div>
 
     <!-- RESULT -->
-    <div class="step" data-step="7" data-block="opt">
+    <div class="step" data-step="8" data-block="opt">
       <div class="result-head">
         <div class="check">✓</div>
         <h2>Klaar! Dit is je verhaal.</h2>
@@ -352,12 +405,12 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
       </div>
 
       <h3 class="next-title">Wat doe je nu? Zes kleine stappen</h3>
-      <p class="next-intro">Een chatbot is een website waar je iets typt en meteen antwoord krijgt. Je laat de chatbot van jouw tekst een cv maken. Volg de stappen rustig, eentje tegelijk.</p>
+      <p class="next-intro">Een chatbot is een website waar je iets typt en meteen antwoord krijgt. Je laat de chatbot van jouw tekst een cv en een motivatiebrief maken. Onderaan staan twee teksten klaar: links voor je cv, rechts voor je motivatiebrief. Volg de stappen rustig, eentje tegelijk, en doe eerst je cv.</p>
 
       <ol class="steps-next">
         <li>
           <p class="s-head">1. Kopieer je tekst</p>
-          <p class="s-body">Heb je alle stappen gelezen? Klik dan onderaan deze pagina op de groene knop "Kopieer naar klembord". Je tekst staat dan klaar om te plakken. Klaar? Ga door naar stap 2.</p>
+          <p class="s-body">Heb je alle stappen gelezen? Klik dan onderaan deze pagina op de groene knop onder "Je cv-tekst". Je tekst staat dan klaar om te plakken. Klaar? Ga door naar stap 2. De motivatiebrief (de tekst rechts) doe je daarna op precies dezelfde manier, het liefst in een nieuwe chat.</p>
         </li>
         <li>
           <p class="s-head">2. Open een chatbot</p>
@@ -413,19 +466,34 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
         </li>
       </ol>
 
-      <h3 class="next-title">Je tekst om te kopiëren</h3>
-      <p class="next-intro">Heb je de stappen gelezen? Kopieer dan hier je tekst en ga verder bij stap 2 hierboven.</p>
-      <button class="btn btn--brand btn--wide" id="copyBtn">Kopieer naar klembord</button>
-      <div class="copybox" id="preview"></div>
+      <h3 class="next-title">Je teksten om te kopiëren</h3>
+      <p class="next-intro">Heb je de stappen gelezen? Hieronder staan twee teksten: links voor je cv, rechts voor je motivatiebrief. Maak ze één voor één, het liefst elk in een nieuwe chat. Kopieer een tekst, plak hem in de chatbot, en doe daarna de andere.</p>
+      <div class="result-cols">
+        <div class="result-col">
+          <p class="rc-title">Je cv-tekst</p>
+          <p class="rc-sub">Hiermee maakt de chatbot je cv.</p>
+          <button class="btn btn--brand btn--wide" id="copyBtnCV">Kopieer cv-tekst</button>
+          <div class="copybox" id="previewCV"></div>
+        </div>
+        <div class="result-col">
+          <p class="rc-title">Je motivatiebrief-tekst</p>
+          <p class="rc-sub">Hiermee maakt de chatbot een basis-motivatiebrief.</p>
+          <button class="btn btn--brand btn--wide" id="copyBtnBrief">Kopieer brief-tekst</button>
+          <div class="copybox" id="previewBrief"></div>
+        </div>
+      </div>
 
-      <p class="infonote" style="margin-top:18px;"><b>Let op:</b> de instructie voor de chatbot (de masterprompt) zit in de gekopieerde tekst verwerkt, inclusief het template en de kleur die je koos. Er wordt niets opgeslagen of verstuurd vanuit dit formulier.</p>
+      <p class="infonote" style="margin-top:18px;"><b>Let op:</b> in elke tekst zit de instructie voor de chatbot (de masterprompt) al verwerkt, inclusief het template en de kleur die je koos. De motivatiebrief wordt bewust een basisbrief: een paar plekken vul je later samen met je jobcoach in voor een echte vacature. Er wordt niets opgeslagen of verstuurd vanuit dit formulier.</p>
     </div>
 
-    <p class="val-msg" id="valMsg"></p>
+    <p class="val-msg" id="valMsg" role="alert" aria-live="assertive"></p>
 
     <div class="nav">
       <button class="btn btn--ghost" id="prevBtn">Terug</button>
-      <button class="btn btn--primary" id="nextBtn">Volgende</button>
+      <div class="nav-right">
+        <button class="btn btn--brand" id="skipNav" type="button">Ik vul mijn gegevens later zelf in</button>
+        <button class="btn btn--primary" id="nextBtn">Volgende</button>
+      </div>
     </div>
   </div>
 </div>
@@ -433,27 +501,34 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
 <div class="copied-toast" id="toast">Gekopieerd naar klembord</div>
 
 <script src="masterprompt.js"></script>
+<script src="masterprompt-motivatiebrief.js"></script>
 <script src="templates.js"></script>
 <script>
 const steps = Array.from(document.querySelectorAll('.step'));
-const totalInput = 7; // 0..6 are input steps, 7 is result
+const totalInput = 8; // 0..7 are input steps, 8 is result
+const lastInput = totalInput-1; // 7 = laatste invulstap (template)
 let cur = 0;
 const fill = document.getElementById('fill');
+const bar = document.getElementById('bar');
 const stepLabel = document.getElementById('stepLabel');
 const blockLabel = document.getElementById('blockLabel');
 const prevBtn = document.getElementById('prevBtn');
 const nextBtn = document.getElementById('nextBtn');
+const skipNav = document.getElementById('skipNav');
 
 function render(){
   steps.forEach(s=>s.classList.toggle('active', +s.dataset.step===cur));
-  const onResult = cur===7;
+  const onResult = cur===totalInput;
   const shown = Math.min(cur+1, totalInput);
-  fill.style.width = (onResult?100:(cur/totalInput*100))+'%';
+  const pct = onResult?100:Math.round(cur/totalInput*100);
+  fill.style.width = pct+'%';
+  bar.setAttribute('aria-valuenow', pct);
   stepLabel.textContent = onResult ? 'Klaar' : ('Stap '+shown+' van '+totalInput);
   const block = steps.find(s=>+s.dataset.step===cur).dataset.block;
   blockLabel.textContent = onResult ? '' : (block==='req'?'Verplicht':'Optioneel');
   prevBtn.style.visibility = cur===0 ? 'hidden':'visible';
-  nextBtn.textContent = cur===6 ? 'Afronden' : (cur===7 ? 'Opnieuw' : 'Volgende');
+  skipNav.style.display = cur===0 ? 'inline-flex' : 'none';
+  nextBtn.textContent = cur===lastInput ? 'Afronden' : (onResult ? 'Opnieuw' : 'Volgende');
   if(onResult) buildPreview();
   window.scrollTo({top:0,behavior:'smooth'});
 }
@@ -467,29 +542,33 @@ function clearVal(){
 }
 function firstInvalid(step){
   if(step===0){
-    if(!v('naam')) return {el:'naam', msg:'Vul je naam in, of kies hieronder "Ik vul mijn gegevens later zelf in".'};
+    if(!v('naam')) return {el:'naam', msg:'Vul je naam in, of kies "Ik vul mijn gegevens later zelf in".'};
     if(!v('tel')) return {el:'tel', msg:'Vul je telefoonnummer in, of kies "Ik vul mijn gegevens later zelf in".'};
     if(!v('plaats')) return {el:'plaats', msg:'Vul je woonplaats in, of kies "Ik vul mijn gegevens later zelf in".'};
     return null;
   }
   if(step===1){
+    if(chipsVal('zoek').length) return null;
+    return {chips:'zoek', msg:'Tik minstens één soort werk aan, of kies "Weet ik nog niet".'};
+  }
+  if(step===2){
     const anyExp=Array.from(document.querySelectorAll('.exp-wat')).some(e=>e.value.trim());
     if(anyExp||v('opleiding')) return null;
     return {sel:'.exp-wat', msg:'Vul minstens één werk of ervaring in, of je school of cursus.'};
   }
-  if(step===2){
+  if(step===3){
     if(chipsVal('talen').length) return null;
     return {chips:'talen', msg:'Kies minstens één taal die je spreekt, of typ er een.'};
   }
-  if(step===3){
+  if(step===4){
     if(v('taak')||v('helpen')) return null;
     return {el:'taak', msg:'Schrijf iets dat je vaak deed, of wie je hebt geholpen.'};
   }
-  if(step===4){
+  if(step===5){
     if(chipsVal('apparaten').length||chipsVal('overjou').length||chipsVal('nietmeer').length) return null;
     return {chips:'overjou', msg:'Tik op deze pagina minstens één antwoord aan.'};
   }
-  if(step===6){
+  if(step===7){
     if(selected) return null;
     return {msg:'Kies eerst een ontwerp voor je cv.'};
   }
@@ -508,19 +587,48 @@ function showInvalid(bad){
 }
 prevBtn.onclick=()=>{ if(cur>0){clearVal();cur--;render();} };
 nextBtn.onclick=()=>{
-  if(cur<7){
+  if(cur<totalInput){
     const bad=firstInvalid(cur);
     if(bad){ showInvalid(bad); return; }
     clearVal(); cur++; render();
   } else { cur=0; render(); }
 };
-document.getElementById('skipPersonal').onclick=()=>{ clearVal(); cur=1; render(); };
+skipNav.onclick=()=>{ clearVal(); cur=1; render(); };
 document.querySelector('.body').addEventListener('input', clearVal);
 
-/* chips */
+/* chips — aantikbaar én toetsenbordbedienbaar (Enter/Spatie) voor schermlezers */
+function toggleChip(c){
+  c.classList.toggle('on'); c.setAttribute('aria-pressed', c.classList.contains('on')?'true':'false'); clearVal();
+  if(c.closest('[data-chips="talen"]')) renderTaalNiveaus();
+}
 document.querySelectorAll('.chip').forEach(c=>{
-  c.onclick=()=>{ c.classList.toggle('on'); clearVal(); };
+  c.setAttribute('role','button');
+  c.setAttribute('tabindex','0');
+  c.setAttribute('aria-pressed','false');
+  c.onclick=()=>toggleChip(c);
+  c.onkeydown=(e)=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); toggleChip(c); } };
 });
+
+/* taalniveau per gekozen taal: na elke gekozen taal-chip kan de deelnemer
+   een niveau aantikken (een beetje / goed / moedertaal). Optioneel. */
+const taalLevel={};
+function renderTaalNiveaus(){
+  const box=document.getElementById('taalNiveaus');
+  const langs=Array.from(document.querySelectorAll('[data-chips="talen"] .chip.on')).map(c=>c.textContent.trim());
+  Object.keys(taalLevel).forEach(k=>{ if(!langs.includes(k)) delete taalLevel[k]; });
+  if(!langs.length){ box.innerHTML=''; return; }
+  const levels=['Een beetje','Goed','Moedertaal'];
+  box.innerHTML='<p class="chip-note" style="margin:10px 0 2px">Hoe goed spreek je deze talen? Tik aan, mag je ook overslaan.</p>'
+    +langs.map(l=>`<div class="taal-row" data-lang="${l}"><span class="tn-name">${l}</span>`
+      +levels.map(lv=>`<button type="button" class="lvl-btn${taalLevel[l]===lv?' on':''}" data-lv="${lv}" aria-pressed="${taalLevel[l]===lv?'true':'false'}">${lv}</button>`).join('')
+      +`</div>`).join('');
+  box.querySelectorAll('.taal-row').forEach(row=>{
+    const lang=row.dataset.lang;
+    row.querySelectorAll('.lvl-btn').forEach(b=>{
+      b.onclick=()=>{ if(taalLevel[lang]===b.dataset.lv) delete taalLevel[lang]; else taalLevel[lang]=b.dataset.lv; renderTaalNiveaus(); };
+    });
+  });
+}
 
 /* experience repeater */
 const expList=document.getElementById('expList');
@@ -531,18 +639,18 @@ function addExp(){
   const div=document.createElement('div');
   div.className='exp';
   div.innerHTML=`<div class="ex-head"><span>Ervaring ${id}</span><button class="rm" type="button">verwijderen</button></div>
-    <label class="field-label" style="margin-top:4px">Wat deed je? En waar?</label>
-    <input type="text" class="exp-wat" placeholder="Bijv. kassamedewerker bij Albert Heijn">
+    <label class="field-label" style="margin-top:4px" for="exp${id}-wat">Wat deed je? En waar?</label>
+    <input type="text" id="exp${id}-wat" class="exp-wat" placeholder="Bijv. kassamedewerker bij Albert Heijn">
     <div class="row2" style="margin-top:8px">
-      <div><label class="field-label" style="margin-top:0">Van (jaar)</label><input type="text" class="exp-van" inputmode="numeric" placeholder="2019"></div>
-      <div><label class="field-label" style="margin-top:0">Tot (jaar)</label><input type="text" class="exp-tot" inputmode="numeric" placeholder="2021 of 'nu'"></div>
+      <div><label class="field-label" style="margin-top:0" for="exp${id}-van">Van (jaar)</label><input type="text" id="exp${id}-van" class="exp-van" inputmode="numeric" placeholder="2019"></div>
+      <div><label class="field-label" style="margin-top:0" for="exp${id}-tot">Tot (jaar)</label><input type="text" id="exp${id}-tot" class="exp-tot" inputmode="numeric" placeholder="2021 of 'nu'"></div>
     </div>
-    <label class="field-label">Wat deed je daar zoal?</label>
+    <label class="field-label" for="exp${id}-taken">Wat deed je daar zoal?</label>
     <div class="example" style="margin-bottom:8px">Bijvoorbeeld: <b>kassa bediend, vakken gevuld, nieuwe collega's ingewerkt</b>.</div>
-    <textarea class="exp-taken" placeholder="Schrijf op welke taken je deed. Een paar steekwoorden is genoeg."></textarea>
-    <label class="field-label">Waar ben je trots op, of wat ging goed?</label>
+    <textarea id="exp${id}-taken" class="exp-taken" placeholder="Schrijf op welke taken je deed. Een paar steekwoorden is genoeg."></textarea>
+    <label class="field-label" for="exp${id}-succes">Waar ben je trots op, of wat ging goed?</label>
     <div class="example" style="margin-bottom:8px">Bijvoorbeeld: <b>nooit te laat geweest</b>, <b>klanten vroegen vaak naar mij</b>, of <b>geholpen de wachtrij korter te maken</b>. Niks te groots nodig, klein telt ook.</div>
-    <textarea class="exp-succes" placeholder="Wat ging goed in deze baan? (mag je ook leeg laten)"></textarea>`;
+    <textarea id="exp${id}-succes" class="exp-succes" placeholder="Wat ging goed in deze baan? (mag je ook leeg laten)"></textarea>`;
   div.querySelector('.rm').onclick=()=>div.remove();
   expList.appendChild(div);
 }
@@ -565,15 +673,20 @@ function renderTemplates(){
     const chosen=selected && selected.tpl===t.id;
     const card=document.createElement('div');
     card.className='tpl-card'+(chosen?' on':'');
-    const sw=t.kleuren.map(k=>`<span class="tpl-swatch${chosen&&selected.color===k.id?' on':''}" data-c="${k.id}" title="${k.naam}" style="background:${k.hex}"></span>`).join('');
+    const sw=t.kleuren.map(k=>`<span class="tpl-swatch${chosen&&selected.color===k.id?' on':''}" data-c="${k.id}" title="${k.naam}" role="button" tabindex="0" aria-label="Kleur ${k.naam}" aria-pressed="${chosen&&selected.color===k.id?'true':'false'}" style="background:${k.hex}"></span>`).join('');
     card.innerHTML=
-      `<div class="tpl-preview"><img src="${col.img}" alt="Voorbeeld ${t.naam}, kleur ${col.naam}" loading="lazy"></div>`
+      `<div class="tpl-preview" role="button" tabindex="0" aria-label="Kies ontwerp ${t.naam}" aria-pressed="${chosen?'true':'false'}"><img src="${col.img}" alt="Voorbeeld ${t.naam}, kleur ${col.naam}" loading="lazy"></div>`
       +`<div class="tpl-name">${t.naam}</div>`
       +`<div class="tpl-chosen">${chosen?'Gekozen: '+col.naam:''}</div>`
       +`<div class="tpl-swatches">${sw}</div>`;
-    card.querySelector('.tpl-preview').onclick=()=>{ selected={tpl:t.id,color:activeColor}; clearVal(); renderTemplates(); };
+    const pickTpl=()=>{ selected={tpl:t.id,color:activeColor}; clearVal(); renderTemplates(); };
+    const preview=card.querySelector('.tpl-preview');
+    preview.onclick=pickTpl;
+    preview.onkeydown=(e)=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); pickTpl(); } };
     card.querySelectorAll('.tpl-swatch').forEach(s=>{
-      s.onclick=(e)=>{ e.stopPropagation(); selected={tpl:t.id,color:s.dataset.c}; clearVal(); renderTemplates(); };
+      const pickColor=()=>{ selected={tpl:t.id,color:s.dataset.c}; clearVal(); renderTemplates(); };
+      s.onclick=(e)=>{ e.stopPropagation(); pickColor(); };
+      s.onkeydown=(e)=>{ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); e.stopPropagation(); pickColor(); } };
     });
     grid.appendChild(card);
   });
@@ -600,7 +713,17 @@ function chipsVal(key){
   return on;
 }
 function v(id){const e=document.getElementById(id);return e?e.value.trim():'';}
-/* datum van invoer (YYYY-MM-DD) naar leesbaar (DD-MM-YYYY) */
+/* talen met (optioneel) niveau per chip-taal, plus het open veld */
+function talenVal(){
+  const out=Array.from(document.querySelectorAll('[data-chips="talen"] .chip.on')).map(c=>{
+    const l=c.textContent.trim();
+    return taalLevel[l] ? `${l} (${taalLevel[l].toLowerCase()})` : l;
+  });
+  const open=document.querySelector('[data-openfor="talen"]');
+  if(open && open.value.trim()) out.push(open.value.trim());
+  return out;
+}
+/* datum van invoer (YYYY-MM-DD) naar leesbaar (DD-MM-YYYY); andere notaties laat staan */
 function dateNL(val){const m=val.match(/^(\d{4})-(\d{2})-(\d{2})$/);return m?`${m[3]}-${m[2]}-${m[1]}`:val;}
 function gather(){
   const exp=Array.from(document.querySelectorAll('.exp')).map(e=>{
@@ -617,30 +740,43 @@ function gather(){
   }).filter(Boolean);
   return {
     naam:v('naam')||'[Zelf invullen]',tel:v('tel')||'[Zelf invullen]',plaats:v('plaats')||'[Zelf invullen]',mail:v('mail'),dob:dateNL(v('dob')),
+    zoek:chipsVal('zoek'),
     exp,opleiding:v('opleiding'),
-    papieren:chipsVal('papieren'),talen:chipsVal('talen'),apparaten:chipsVal('apparaten'),
+    papieren:chipsVal('papieren'),talen:talenVal(),apparaten:chipsVal('apparaten'),
     overjou:chipsVal('overjou'),nietmeer:chipsVal('nietmeer'),
     taak:v('taak'),helpen:v('helpen'),
+    uren:chipsVal('uren'),starten:chipsVal('starten'),vervoer:chipsVal('vervoer'),
     spannend:v('opt_spannend'),geleerd:v('opt_geleerd'),grens:v('opt_grens')
   };
 }
 function line(label,val){ if(!val|| (Array.isArray(val)&&!val.length))return ''; return `${label}: ${Array.isArray(val)?val.join(', '):val}\n`; }
 
-function buildPreview(){
-  const d=gather();
-  let t=MASTERPROMPT+`\n\n---\n\n### GEGEVENS VAN DE KANDIDAAT ###\n\n`;
-  t+=`-- Contact --\n`;
+/* het gedeelde gegevensblok van de kandidaat: identiek voor cv en brief */
+function buildDataBlock(d){
+  let t=`-- Contact --\n`;
   t+=line('Naam',d.naam)+line('Telefoon',d.tel)+line('Woonplaats',d.plaats)+line('E-mail',d.mail)+line('Geboortedatum',d.dob);
+  if(d.zoek.length) t+=`\n-- Wat ik zoek --\n`+line('Soort werk dat ik zoek',d.zoek);
   t+=`\n-- Werk en ervaring --\n`+(d.exp.length?d.exp.join('\n')+'\n':'(niet ingevuld)\n');
   t+=line('\nOpleiding/cursussen',d.opleiding);
   t+=`\n-- Vaardigheden --\n`;
   t+=line('Papieren/pasjes',d.papieren)+line('Talen',d.talen)+line('Apparaten/programma\'s',d.apparaten);
   t+=line('Wat je vaak deed',d.taak)+line('Wie je hielp/op weg zette',d.helpen);
-  t+=line('Anderen zeggen over jou',d.overjou)+line('Liever niet meer',d.nietmeer);
+  t+=line('Anderen zeggen over jou',d.overjou);
+  const besch=[line('Uren per week',d.uren),line('Beschikbaar vanaf',d.starten),line('Vervoer / hoe ver wil ik reizen',d.vervoer)].join('');
+  if(besch.trim()) t+=`\n-- Beschikbaarheid --\n`+besch;
   const opt=[line('Een keer dat het spannend werd',d.spannend),line('Geleerd van iemand',d.geleerd),line('Voor jezelf opgekomen',d.grens)].join('');
   if(opt.trim()) t+=`\n-- Extra (optioneel) --\n`+opt;
+  if(d.nietmeer.length) t+=`\n-- Alleen voor de jobcoach (niet op het cv of in de brief) --\n`+line('Werk of omstandigheden die de kandidaat liever vermijdt',d.nietmeer);
   t+=opmaakBlok();
-  document.getElementById('preview').textContent=t.trim();
+  return t;
+}
+function buildPreview(){
+  const d=gather();
+  const data=`### GEGEVENS VAN DE KANDIDAAT ###\n\n`+buildDataBlock(d);
+  const cv=(MASTERPROMPT+`\n\n---\n\n`+data).trim();
+  const brief=(MASTERPROMPT_MOTIVATIEBRIEF+`\n\n---\n\n`+data).trim();
+  document.getElementById('previewCV').textContent=cv;
+  document.getElementById('previewBrief').textContent=brief;
 }
 
 function legacyCopy(txt){ const ta=document.createElement('textarea');ta.value=txt;document.body.appendChild(ta);ta.select();try{document.execCommand('copy');}catch(e){}ta.remove(); }
@@ -649,19 +785,22 @@ function copyText(txt){
   if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(done,()=>{ legacyCopy(txt); done(); }); }
   else { legacyCopy(txt); done(); }
 }
-document.getElementById('copyBtn').onclick=()=>copyText(document.getElementById('preview').textContent);
+document.getElementById('copyBtnCV').onclick=()=>copyText(document.getElementById('previewCV').textContent);
+document.getElementById('copyBtnBrief').onclick=()=>copyText(document.getElementById('previewBrief').textContent);
 document.querySelectorAll('.iter-copy').forEach(b=>{ b.onclick=()=>copyText(document.getElementById(b.dataset.copy).textContent); });
 
 /* dev-modus: alleen actief met ?test in de URL. Vult per stap de open velden
    met geloofwaardige, fictieve testgegevens zodat je snel kunt doorklikken. */
 const DEV = new URLSearchParams(location.search).has('test');
 function devSet(id,val){ const e=document.getElementById(id); if(e) e.value=val; }
-function devChips(group,labels){ document.querySelectorAll(`[data-chips="${group}"] .chip`).forEach(c=>{ c.classList.toggle('on', labels.includes(c.textContent.trim())); }); }
+function devChips(group,labels){ document.querySelectorAll(`[data-chips="${group}"] .chip`).forEach(c=>{ const on=labels.includes(c.textContent.trim()); c.classList.toggle('on', on); c.setAttribute('aria-pressed', on?'true':'false'); }); }
 function fillStep(step){
   if(step===0){
     devSet('naam','Sam de Vries'); devSet('tel','06 12345678'); devSet('plaats','Almere');
-    devSet('mail','sam.devries@voorbeeld.nl'); devSet('dob','1992-04-18');
+    devSet('mail','sam.devries@voorbeeld.nl'); devSet('dob','18-04-1992');
   } else if(step===1){
+    devChips('zoek',['Magazijn / logistiek','Schoonmaak']);
+  } else if(step===2){
     let first=document.querySelector('.exp'); if(!first){ addExp(); first=document.querySelector('.exp'); }
     first.querySelector('.exp-wat').value="Kassamedewerker bij Albert Heijn";
     first.querySelector('.exp-van').value="2019";
@@ -669,28 +808,33 @@ function fillStep(step){
     first.querySelector('.exp-taken').value="Kassa bediend, vakken gevuld, klanten geholpen en nieuwe collega's ingewerkt.";
     first.querySelector('.exp-succes').value="Klanten vroegen vaak naar mij en ik ben nooit te laat geweest.";
     devSet('opleiding',"Vmbo afgerond, daarna een heftruckcursus gehaald.");
-  } else if(step===2){
+  } else if(step===3){
     devChips('papieren',['Rijbewijs B','VCA']);
     devChips('talen',['Nederlands','Engels','Arabisch']);
-  } else if(step===3){
+    taalLevel['Nederlands']='Moedertaal'; taalLevel['Engels']='Goed'; taalLevel['Arabisch']='Een beetje';
+    renderTaalNiveaus();
+  } else if(step===4){
     devSet('taak',"Elke ochtend ontbijt klaarmaken voor tien bewoners in het verzorgingshuis.");
     devSet('helpen',"Een nieuwe collega op de kassa ingewerkt en mijn buurman geholpen met zijn post.");
-  } else if(step===4){
+  } else if(step===5){
     devChips('apparaten',['Kassasysteem','Computer / Office']);
     devChips('overjou',['Rustig','Behulpzaam','Betrouwbaar']);
     devChips('nietmeer',['Avonddiensten']);
-  } else if(step===5){
+  } else if(step===6){
+    devChips('uren',['Parttime (tot 32 uur)']);
+    devChips('starten',['In overleg']);
+    devChips('vervoer',['Fiets','Openbaar vervoer']);
     devSet('opt_spannend',"Een klant werd boos over de wachtrij. Ik heb hem rustig te woord gestaan en geholpen.");
     devSet('opt_geleerd',"Mijn oma leerde me koken voor grote groepen.");
     devSet('opt_grens',"Toen ik te veel diensten kreeg, heb ik rustig aangegeven dat het niet ging.");
-  } else if(step===6){
+  } else if(step===7){
     if(TEMPLATES && TEMPLATES.length){ selected={tpl:TEMPLATES[0].id,color:tplDefaultColor(TEMPLATES[0])}; renderTemplates(); }
   }
   clearVal();
 }
 if(DEV){
   steps.forEach(s=>{
-    const step=+s.dataset.step; if(step>6) return;
+    const step=+s.dataset.step; if(step>7) return;
     const b=document.createElement('button');
     b.type='button'; b.className='devfill'; b.textContent='⚡ Vul testgegevens';
     b.onclick=()=>fillStep(step);
