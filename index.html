@@ -243,11 +243,7 @@ textarea{min-height:84px;resize:vertical;line-height:1.5;}
         <div><label class="field-label" for="tel">Telefoon</label><input type="tel" id="tel" placeholder="06 ..."></div>
         <div><label class="field-label" for="plaats">Woonplaats</label><input type="text" id="plaats" placeholder="Almere"></div>
       </div>
-      <div class="row2">
-        <div><label class="field-label" for="mail">E-mail <span style="font-weight:400;color:var(--text-muted)">(als je die hebt)</span></label><input type="email" id="mail" placeholder="naam@voorbeeld.nl"></div>
-        <div><label class="field-label" for="dob">Geboortedatum <span style="font-weight:400;color:var(--text-muted)">(hoeft niet)</span></label><input type="text" id="dob" inputmode="numeric" autocomplete="bday" placeholder="dd-mm-jjjj"></div>
-      </div>
-      <p class="chip-note" style="margin-top:6px;">Je geboortedatum is niet verplicht. Je leeftijd weglaten kan zelfs helpen, want sommige werkgevers laten zich daardoor onbewust beïnvloeden.</p>
+      <div><label class="field-label" for="mail">E-mail <span style="font-weight:400;color:var(--text-muted)">(als je die hebt)</span></label><input type="email" id="mail" placeholder="naam@voorbeeld.nl"></div>
       <p class="skip-note" style="margin-top:18px;">Geen naam of contactgegevens bij de hand? Gebruik de groene knop <b>"Ik vul mijn gegevens later zelf in"</b> onderaan. In je cv komt op die plekken <b>[Zelf invullen]</b> te staan, dat vul je later zelf aan.</p>
     </div>
 
@@ -725,8 +721,6 @@ function talenVal(){
   if(open && open.value.trim()) out.push(open.value.trim());
   return out;
 }
-/* datum van invoer (YYYY-MM-DD) naar leesbaar (DD-MM-YYYY); andere notaties laat staan */
-function dateNL(val){const m=val.match(/^(\d{4})-(\d{2})-(\d{2})$/);return m?`${m[3]}-${m[2]}-${m[1]}`:val;}
 function gather(){
   const exp=Array.from(document.querySelectorAll('.exp')).map(e=>{
     const wat=e.querySelector('.exp-wat').value.trim();
@@ -741,7 +735,7 @@ function gather(){
     return block;
   }).filter(Boolean);
   return {
-    naam:v('naam')||'[Zelf invullen]',tel:v('tel')||'[Zelf invullen]',plaats:v('plaats')||'[Zelf invullen]',mail:v('mail'),dob:dateNL(v('dob')),
+    naam:v('naam')||'[Zelf invullen]',tel:v('tel')||'[Zelf invullen]',plaats:v('plaats')||'[Zelf invullen]',mail:v('mail'),
     zoek:chipsVal('zoek'),
     exp,opleiding:v('opleiding'),
     papieren:chipsVal('papieren'),talen:talenVal(),apparaten:chipsVal('apparaten'),
@@ -756,7 +750,7 @@ function line(label,val){ if(!val|| (Array.isArray(val)&&!val.length))return '';
 /* het gedeelde gegevensblok van de kandidaat: identiek voor cv en brief */
 function buildDataBlock(d){
   let t=`-- Contact --\n`;
-  t+=line('Naam',d.naam)+line('Telefoon',d.tel)+line('Woonplaats',d.plaats)+line('E-mail',d.mail)+line('Geboortedatum',d.dob);
+  t+=line('Naam',d.naam)+line('Telefoon',d.tel)+line('Woonplaats',d.plaats)+line('E-mail',d.mail);
   if(d.zoek.length) t+=`\n-- Wat ik zoek --\n`+line('Soort werk dat ik zoek',d.zoek);
   t+=`\n-- Werk en ervaring --\n`+(d.exp.length?d.exp.join('\n')+'\n':'(niet ingevuld)\n');
   t+=line('\nOpleiding/cursussen',d.opleiding);
@@ -799,7 +793,7 @@ function devChips(group,labels){ document.querySelectorAll(`[data-chips="${group
 function fillStep(step){
   if(step===0){
     devSet('naam','Sam de Vries'); devSet('tel','06 12345678'); devSet('plaats','Almere');
-    devSet('mail','sam.devries@voorbeeld.nl'); devSet('dob','18-04-1992');
+    devSet('mail','sam.devries@voorbeeld.nl');
   } else if(step===1){
     devChips('zoek',['Magazijn / logistiek','Schoonmaak']);
   } else if(step===2){
